@@ -1,0 +1,17 @@
+{
+  "name": "camport-frontend",
+  "version": "1.0.0",
+  "description": "Frontend para Proyecto Camport",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "keywords": ["react", "typescript", "frontend"],
+  "author": "Equipo Camport",
+  "license": "ISC"
+}

@@ -1,0 +1,13 @@
+{
+  "name": "camport-backend",
+  "version": "1.0.0",
+  "description": "Backend API para Proyecto Camport",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": ["api", "jwt", "backend"],
+  "author": "Equipo Camport",
+  "license": "ISC"
+}

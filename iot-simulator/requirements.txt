@@ -1,0 +1,7 @@
+# Dependencias Python para el simulador IoT
+# Descomenta y agrega las que necesites:
+
+# paho-mqtt==1.6.1
+# requests==2.31.0
+# python-dotenv==1.0.0
+# flask==2.3.0
