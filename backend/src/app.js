@@ -64,24 +64,24 @@
      // Importar rutas
      const authRoutes = require('./routes/authRoutes');
      const userRoutes = require('./routes/userRoutes');
-     const potreroRoutes = require('./routes/potreroRoutes');
      const animalRoutes = require('./routes/animalRoutes');
-     const grupoRoutes = require('./routes/grupoRoutes');
+     const potreroRoutes = require('./routes/potreroRoutes');
      const collarRoutes = require('./routes/collarRoutes');
      const telemetriaRoutes = require('./routes/telemetriaRoutes');
-     const alertaRoutes = require('./routes/alertaRoutes');
-     const reporteRoutes = require('./routes/reporteRoutes');
+     // const grupoRoutes = require('./routes/grupoRoutes'); // Pendiente de implementar
+     // const alertaRoutes = require('./routes/alertaRoutes'); // Pendiente de implementar
+     // const reporteRoutes = require('./routes/reporteRoutes'); // Pendiente de implementar
 
      // Registrar rutas
      app.use('/api/auth', authRoutes);
      app.use('/api/users', userRoutes);
-     app.use('/api/potreros', potreroRoutes);
      app.use('/api/animales', animalRoutes);
-     app.use('/api/grupos', grupoRoutes);
+     app.use('/api/potreros', potreroRoutes);
      app.use('/api/collares', collarRoutes);
      app.use('/api/telemetria', telemetriaRoutes);
-     app.use('/api/alertas', alertaRoutes);
-     app.use('/api/reportes', reporteRoutes);
+     // app.use('/api/grupos', grupoRoutes); // Pendiente de implementar
+     // app.use('/api/alertas', alertaRoutes); // Pendiente de implementar
+     // app.use('/api/reportes', reporteRoutes); // Pendiente de implementar
 
      // ==========================================
      // MANEJO DE ERRORES
