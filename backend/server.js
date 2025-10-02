@@ -36,7 +36,7 @@
 
          // 5. Iniciar servicio de alertas automáticas
          const AlertService = require('./src/services/alertService');
-         AlertService.startMonitoring();
+         AlertService.iniciar();
          logger.info('🚨 Sistema de alertas iniciado');
 
          // 6. Manejo de cierre graceful

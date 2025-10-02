@@ -5,9 +5,9 @@
 
 require('dotenv').config();
 
-const { sequelize, testConnection } = require('./src/config/database');
-const models = require('./src/models');
-const logger = require('./src/utils/logger');
+const { sequelize, testConnection } = require('./config/database');
+const models = require('./models');
+const logger = require('./utils/logger');
 
 async function initializeDatabase() {
   try {
