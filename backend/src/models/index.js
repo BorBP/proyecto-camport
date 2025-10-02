@@ -7,7 +7,7 @@ const Usuario = require('./Usuario');
 const Animal = require('./Animal');
 const Grupo = require('./Grupo');
 const Potrero = require('./Potrero');
-const Collar = require('./Collar');
+const Collar = require('./Collares');
 const Telemetria = require('./Telemetria');
 const Alerta = require('./Alerta');
 
