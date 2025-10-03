@@ -1,6 +1,6 @@
 /**
  * Rutas de Usuarios
- * Ejemplo de uso completo de middlewares de autenticación, roles y validación
+ * Gestión completa de usuarios con middlewares de autenticación, roles y validación.
  */
 
 const express = require('express');
@@ -8,7 +8,6 @@ const router = express.Router();
 const {
   authenticate,
   requireAdmin,
-  requireRoles,
   requireOwnerOrAdmin,
   validateRequired,
   validateEmail,
@@ -17,8 +16,7 @@ const {
   validateEnum
 } = require('../middleware');
 
-// Controladores (deben ser creados)
-// const userController = require('../controllers/userController');
+const userController = require('../controllers/userController');
 
 /**
  * GET /api/users
@@ -27,14 +25,7 @@ const {
 router.get('/',
   authenticate,
   requireAdmin,
-  (req, res) => {
-    // userController.getAll(req, res);
-    res.status(200).json({
-      message: 'Lista de usuarios',
-      user: req.user,
-      note: 'Solo los administradores pueden ver esta lista'
-    });
-  }
+  userController.getAll
 );
 
 /**
@@ -45,13 +36,7 @@ router.get('/:id',
   authenticate,
   validateUUID('id'),
   requireOwnerOrAdmin('id'),
-  (req, res) => {
-    // userController.getById(req, res);
-    res.status(200).json({
-      message: `Detalles del usuario ${req.params.id}`,
-      user: req.user
-    });
-  }
+  userController.getById
 );
 
 /**
@@ -65,17 +50,7 @@ router.post('/',
   validateEmail,
   validatePassword,
   validateEnum('rol', ['administrador', 'capataz']),
-  (req, res) => {
-    // userController.create(req, res);
-    res.status(201).json({
-      message: 'Usuario creado exitosamente',
-      data: {
-        nombre: req.body.nombre,
-        email: req.body.email,
-        rol: req.body.rol
-      }
-    });
-  }
+  userController.create
 );
 
 /**
@@ -86,14 +61,8 @@ router.put('/:id',
   authenticate,
   validateUUID('id'),
   requireOwnerOrAdmin('id'),
-  validateEmail,
-  (req, res) => {
-    // userController.update(req, res);
-    res.status(200).json({
-      message: `Usuario ${req.params.id} actualizado exitosamente`,
-      user: req.user
-    });
-  }
+  validateEmail, // Opcional, para validar si se envía un nuevo email
+  userController.update
 );
 
 /**
@@ -104,18 +73,12 @@ router.delete('/:id',
   authenticate,
   requireAdmin,
   validateUUID('id'),
-  (req, res) => {
-    // userController.delete(req, res);
-    res.status(200).json({
-      message: `Usuario ${req.params.id} eliminado exitosamente`,
-      user: req.user
-    });
-  }
+  userController.remove
 );
 
 /**
  * PATCH /api/users/:id/password
- * Cambiar contraseña - Propietario o administrador
+ * Cambiar contraseña de un usuario - Propietario o administrador
  */
 router.patch('/:id/password',
   authenticate,
@@ -123,13 +86,7 @@ router.patch('/:id/password',
   requireOwnerOrAdmin('id'),
   validateRequired(['currentPassword', 'newPassword']),
   validatePassword,
-  (req, res) => {
-    // userController.changePassword(req, res);
-    res.status(200).json({
-      message: 'Contraseña actualizada exitosamente',
-      user: req.user
-    });
-  }
+  userController.changePassword
 );
 
 /**
@@ -141,13 +98,7 @@ router.patch('/:id/activate',
   requireAdmin,
   validateUUID('id'),
   validateRequired(['activo']),
-  (req, res) => {
-    // userController.toggleActive(req, res);
-    res.status(200).json({
-      message: `Usuario ${req.body.activo ? 'activado' : 'desactivado'} exitosamente`,
-      user: req.user
-    });
-  }
+  userController.toggleActive
 );
 
 module.exports = router;

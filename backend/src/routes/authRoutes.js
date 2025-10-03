@@ -4,6 +4,7 @@
  */
 
 const express = require('express');
+const rateLimit = require('express-rate-limit');
 const router = express.Router();
 const {
   authenticate,
@@ -17,6 +18,33 @@ const {
 
 const authController = require('../controllers/authController');
 
+// Rate limiter específico para login (prevención de fuerza bruta)
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutos
+  max: 5, // 5 intentos
+  message: {
+    error: 'Demasiados intentos de login',
+    message: 'Has excedido el límite de intentos de inicio de sesión. Intenta nuevamente en 15 minutos.',
+    retryAfter: '15 minutos'
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skipSuccessfulRequests: true // Solo cuenta intentos fallidos
+});
+
+// Rate limiter para registro (prevención de spam)
+const registerLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hora
+  max: 3, // 3 registros por hora
+  message: {
+    error: 'Límite de registros excedido',
+    message: 'Has excedido el límite de registros por hora. Intenta más tarde.',
+    retryAfter: '1 hora'
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 // Aplicar middleware de logging de autenticación a todas las rutas
 router.use(logAuthActivity);
 
@@ -25,6 +53,7 @@ router.use(logAuthActivity);
  * Registrar nuevo usuario
  */
 router.post('/register',
+  registerLimiter,
   validateRequired(['nombre', 'email', 'password', 'rol']),
   validateEmail,
   validatePassword,
@@ -37,6 +66,7 @@ router.post('/register',
  * Iniciar sesión
  */
 router.post('/login',
+  loginLimiter,
   validateRequired(['email', 'password']),
   validateEmail,
   authController.login
@@ -76,6 +106,11 @@ router.get('/me',
 router.post('/change-password',
   authenticate,
   validateRequired(['currentPassword', 'newPassword']),
+  // Validar fortaleza de newPassword
+  (req, res, next) => {
+    req.body.password = req.body.newPassword; // Para que validatePassword lo evalúe
+    next();
+  },
   validatePassword,
   authController.changePassword
 );
