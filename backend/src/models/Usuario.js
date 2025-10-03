@@ -51,15 +51,18 @@
     // HOOKS - Encriptar password antes de guardar
     // ==========================================
 
+    // Factor de costo de bcrypt (10-12 recomendado, mayor = más seguro pero más lento)
+    const BCRYPT_ROUNDS = parseInt(process.env.BCRYPT_ROUNDS) || 12;
+
     Usuario.beforeCreate(async (usuario) => {
     if (usuario.password) {
-        usuario.password = await bcrypt.hash(usuario.password, 10);
+        usuario.password = await bcrypt.hash(usuario.password, BCRYPT_ROUNDS);
     }
     });
 
     Usuario.beforeUpdate(async (usuario) => {
     if (usuario.changed('password')) {
-        usuario.password = await bcrypt.hash(usuario.password, 10);
+        usuario.password = await bcrypt.hash(usuario.password, BCRYPT_ROUNDS);
     }
     });
 

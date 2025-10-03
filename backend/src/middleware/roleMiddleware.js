@@ -3,6 +3,8 @@
  * Verifica que el usuario tenga los permisos necesarios
  */
 
+const logger = require('../utils/logger');
+
 /**
  * Middleware para verificar si el usuario es administrador
  */
@@ -26,7 +28,7 @@ const requireAdmin = (req, res, next) => {
 
     next();
   } catch (error) {
-    console.error('Error en requireAdmin:', error);
+    logger.error('Error en requireAdmin:', error);
     return res.status(500).json({
       error: 'Error de autorización',
       message: 'Ocurrió un error al verificar tus permisos'
@@ -57,7 +59,7 @@ const requireCapataz = (req, res, next) => {
 
     next();
   } catch (error) {
-    console.error('Error en requireCapataz:', error);
+    logger.error('Error en requireCapataz:', error);
     return res.status(500).json({
       error: 'Error de autorización',
       message: 'Ocurrió un error al verificar tus permisos'
@@ -91,7 +93,7 @@ const requireRoles = (rolesPermitidos) => {
 
       next();
     } catch (error) {
-      console.error('Error en requireRoles:', error);
+      logger.error('Error en requireRoles:', error);
       return res.status(500).json({
         error: 'Error de autorización',
         message: 'Ocurrió un error al verificar tus permisos'
@@ -134,7 +136,7 @@ const requireOwnerOrAdmin = (paramName = 'userId') => {
 
       next();
     } catch (error) {
-      console.error('Error en requireOwnerOrAdmin:', error);
+      logger.error('Error en requireOwnerOrAdmin:', error);
       return res.status(500).json({
         error: 'Error de autorización',
         message: 'Ocurrió un error al verificar tus permisos'
