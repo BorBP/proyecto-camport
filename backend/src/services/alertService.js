@@ -31,7 +31,7 @@ class AlertService {
     }
 
     this.isRunning = true;
-    
+
     // Ejecutar cada minuto
     this.intervalId = setInterval(() => {
       this.procesarAlertas();
@@ -102,7 +102,7 @@ class AlertService {
 
       // Obtener todos los animales activos con collar y potrero asignado
       const animales = await Animal.findAll({
-        where: { 
+        where: {
           activo: true,
           collar_id: { [Op.ne]: null },
           potrero_id: { [Op.ne]: null }
@@ -271,7 +271,7 @@ class AlertService {
       // Agrupar por animal y obtener la más reciente
       const telemetriasPorAnimal = {};
       telemetriasRecientes.forEach(tel => {
-        if (!telemetriasPorAnimal[tel.animal_id] || 
+        if (!telemetriasPorAnimal[tel.animal_id] ||
             tel.timestamp > telemetriasPorAnimal[tel.animal_id].timestamp) {
           telemetriasPorAnimal[tel.animal_id] = tel;
         }
@@ -330,7 +330,7 @@ class AlertService {
       const tiempoLimite = new Date(Date.now() - this.umbrales.inactividad_horas * 60 * 60 * 1000);
 
       const animales = await Animal.findAll({
-        where: { 
+        where: {
           activo: true,
           collar_id: { [Op.ne]: null }
         }
@@ -354,7 +354,7 @@ class AlertService {
               telemetriasRecientes[i-1].latitud, telemetriasRecientes[i-1].longitud,
               telemetriasRecientes[i].latitud, telemetriasRecientes[i].longitud
             );
-            
+
             // Si se movió más de 10 metros, hay actividad
             if (distancia > 0.01) { // ~10 metros
               hayMovimiento = true;
@@ -413,7 +413,7 @@ class AlertService {
       const tiempoLimite = new Date(Date.now() - this.umbrales.tiempo_sin_datos * 60 * 1000);
 
       const collares = await Collar.findAll({
-        where: { 
+        where: {
           activo: true,
           animal_id: { [Op.ne]: null },
           estado: 'activo'
@@ -445,7 +445,7 @@ class AlertService {
           });
 
           if (!alertaExistente) {
-            const minutosDesdeUltimoDato = ultimaTelemetria 
+            const minutosDesdeUltimoDato = ultimaTelemetria
               ? Math.floor((Date.now() - ultimaTelemetria.timestamp) / (60 * 1000))
               : null;
 
@@ -570,9 +570,9 @@ class AlertService {
     const R = 6371; // Radio de la Tierra en km
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLng = (lng2 - lng1) * Math.PI / 180;
-    const a = 
+    const a =
       Math.sin(dLat/2) * Math.sin(dLat/2) +
-      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
       Math.sin(dLng/2) * Math.sin(dLng/2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     return R * c;
