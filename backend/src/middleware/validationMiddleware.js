@@ -3,6 +3,8 @@
  * Valida los datos de entrada en las solicitudes
  */
 
+const logger = require('../utils/logger');
+
 /**
  * Valida que los campos requeridos estén presentes
  * @param {Array<string>} camposRequeridos - Array con nombres de campos requeridos
@@ -34,7 +36,7 @@ const validateRequired = (camposRequeridos) => {
 
       next();
     } catch (error) {
-      console.error('Error en validateRequired:', error);
+      logger.error('Error en validateRequired:', error);
       return res.status(500).json({
         error: 'Error de validación',
         message: 'Ocurrió un error al validar los datos'
@@ -66,7 +68,7 @@ const validateEmail = (req, res, next) => {
 
     next();
   } catch (error) {
-    console.error('Error en validateEmail:', error);
+    logger.error('Error en validateEmail:', error);
     return res.status(500).json({
       error: 'Error de validación',
       message: 'Ocurrió un error al validar el email'
@@ -105,7 +107,7 @@ const validatePassword = (req, res, next) => {
 
     next();
   } catch (error) {
-    console.error('Error en validatePassword:', error);
+    logger.error('Error en validatePassword:', error);
     return res.status(500).json({
       error: 'Error de validación',
       message: 'Ocurrió un error al validar la contraseña'
@@ -138,7 +140,7 @@ const validateUUID = (paramName) => {
 
       next();
     } catch (error) {
-      console.error('Error en validateUUID:', error);
+      logger.error('Error en validateUUID:', error);
       return res.status(500).json({
         error: 'Error de validación',
         message: 'Ocurrió un error al validar el ID'
@@ -180,7 +182,7 @@ const validateRange = (campo, min, max) => {
 
       next();
     } catch (error) {
-      console.error('Error en validateRange:', error);
+      logger.error('Error en validateRange:', error);
       return res.status(500).json({
         error: 'Error de validación',
         message: 'Ocurrió un error al validar el rango'
@@ -213,7 +215,7 @@ const validateEnum = (campo, opcionesPermitidas) => {
 
       next();
     } catch (error) {
-      console.error('Error en validateEnum:', error);
+      logger.error('Error en validateEnum:', error);
       return res.status(500).json({
         error: 'Error de validación',
         message: 'Ocurrió un error al validar las opciones'
@@ -251,7 +253,7 @@ const validateCoordinates = (req, res, next) => {
 
     next();
   } catch (error) {
-    console.error('Error en validateCoordinates:', error);
+    logger.error('Error en validateCoordinates:', error);
     return res.status(500).json({
       error: 'Error de validación',
       message: 'Ocurrió un error al validar las coordenadas'
@@ -283,7 +285,7 @@ const validateDate = (campo) => {
 
       next();
     } catch (error) {
-      console.error('Error en validateDate:', error);
+      logger.error('Error en validateDate:', error);
       return res.status(500).json({
         error: 'Error de validación',
         message: 'Ocurrió un error al validar la fecha'
