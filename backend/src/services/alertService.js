@@ -53,6 +53,13 @@ class AlertService {
   }
 
   /**
+   * Alias para detener (para compatibilidad)
+   */
+  stopMonitoring() {
+    this.detener();
+  }
+
+  /**
    * Procesar todas las alertas automáticas
    */
   async procesarAlertas() {
@@ -103,15 +110,15 @@ class AlertService {
       // Obtener todos los animales activos con collar y potrero asignado
       const animales = await Animal.findAll({
         where: {
-          activo: true,
+          estado: 'activo',
           collar_id: { [Op.ne]: null },
           potrero_id: { [Op.ne]: null }
         },
         include: [
           {
             model: Collar,
-            as: 'collar',
-            where: { activo: true }
+            as: 'collar'
+            // Collar model doesn't have 'activo' field based on our model review
           },
           {
             model: Potrero,
@@ -490,7 +497,7 @@ class AlertService {
           {
             model: Animal,
             as: 'animal',
-            attributes: ['id', 'nombre', 'identificacion']
+            attributes: ['id', 'nombre', 'identificador']
           }
         ]
       });

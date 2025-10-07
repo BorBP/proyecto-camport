@@ -39,7 +39,9 @@ const generateRefreshToken = (usuario) => {
     expiresIn: '30d' // Los refresh tokens duran más
   };
 
-  return jwt.sign(payload, process.env.JWT_SECRET, options);
+  // Usar REFRESH_SECRET si está disponible, sino usar JWT_SECRET
+  const secret = process.env.REFRESH_SECRET || process.env.JWT_SECRET;
+  return jwt.sign(payload, secret, options);
 };
 
 /**
@@ -51,6 +53,21 @@ const generateRefreshToken = (usuario) => {
 const verifyToken = (token) => {
   try {
     return jwt.verify(token, process.env.JWT_SECRET);
+  } catch (error) {
+    throw error;
+  }
+};
+
+/**
+ * Verifica un refresh token JWT
+ * @param {string} token - Refresh token a verificar
+ * @returns {Object} Payload decodificado
+ * @throws {Error} Si el token es inválido o expiró
+ */
+const verifyRefreshToken = (token) => {
+  try {
+    const secret = process.env.REFRESH_SECRET || process.env.JWT_SECRET;
+    return jwt.verify(token, secret);
   } catch (error) {
     throw error;
   }
@@ -69,5 +86,6 @@ module.exports = {
   generateToken,
   generateRefreshToken,
   verifyToken,
+  verifyRefreshToken,
   decodeToken
 };

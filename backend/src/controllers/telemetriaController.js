@@ -46,7 +46,7 @@ const ingestTelemetria = async (req, res) => {
     // Crear registro de telemetría
     const telemetria = await Telemetria.create({
       collar_id: collar.id,
-      animal_id: collar.animal_id,
+      animal_id: collar.animal ? collar.animal.id : null,
       latitud,
       longitud,
       altitud: altitud || null,
@@ -74,7 +74,7 @@ const ingestTelemetria = async (req, res) => {
         {
           model: Animal,
           as: 'animal',
-          attributes: ['id', 'nombre', 'raza', 'edad']
+          attributes: ['id', 'nombre', 'raza', 'edad_meses']
         }
       ]
     });

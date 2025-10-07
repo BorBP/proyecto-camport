@@ -1,11 +1,11 @@
 /**
  * Script de inicialización de la base de datos
- * Configura y sincroniza la base de datos PostgreSQL para Camport
+ * Configura y sincroniza la base de datos SQLite para Camport
  */
 
 require('dotenv').config();
 
-const { sequelize, testConnection } = require('./config/database');
+const { sequelize } = require('./config/database');
 const models = require('./models');
 const logger = require('./utils/logger');
 
@@ -14,8 +14,8 @@ async function initializeDatabase() {
     console.log('🚀 Iniciando configuración de base de datos Camport...\n');
 
     // 1. Probar conexión
-    console.log('📡 Probando conexión a PostgreSQL...');
-    await testConnection();
+    console.log('📡 Probando conexión a SQLite...');
+    await sequelize.authenticate();
     console.log('✅ Conexión exitosa\n');
 
     // 2. Sincronizar modelos
@@ -38,51 +38,33 @@ async function initializeDatabase() {
     console.log('👤 Verificando usuario administrador...');
     const { Usuario } = models;
     const adminExiste = await Usuario.findOne({
-      where: { email: 'admin@camport.com' }
+      where: { email: 'admin@camport.local' }
     });
 
     if (!adminExiste) {
-      const bcrypt = require('bcrypt');
-      const hashedPassword = await bcrypt.hash('admin123', 10);
-      
       await Usuario.create({
-        nombre: 'Administrador',
-        email: 'admin@camport.com',
-        password: hashedPassword,
+        nombre: 'Administrador del Sistema',
+        email: 'admin@camport.local',
+        password: 'Admin123!', // Se encripta automáticamente por el hook
         rol: 'administrador',
         activo: true
       });
       console.log('✅ Usuario administrador creado');
-      console.log('   📧 Email: admin@camport.com');
-      console.log('   🔑 Password: admin123');
+      console.log('   📧 Email: admin@camport.local');
+      console.log('   🔑 Password: Admin123!');
     } else {
       console.log('✅ Usuario administrador ya existe');
     }
 
     console.log('\n🎉 Base de datos configurada exitosamente!');
-    console.log('\n📋 INFORMACIÓN DE CONEXIÓN:');
-    console.log(`   🏠 Host: ${process.env.DB_HOST || 'localhost'}`);
-    console.log(`   🔢 Puerto: ${process.env.DB_PORT || '5432'}`);
-    console.log(`   📚 Base de datos: ${process.env.DB_NAME || 'camport'}`);
-    console.log(`   👤 Usuario: ${process.env.DB_USER || 'postgres'}`);
-
     console.log('\n🚀 PRÓXIMOS PASOS:');
     console.log('   1. Ejecutar: npm run dev');
-    console.log('   2. Acceder a: http://localhost:3000');
-    console.log('   3. Login con: admin@camport.com / admin123');
-    console.log('   4. Configurar datos de prueba (animales, collares, potreros)');
+    console.log('   2. Acceder a: http://localhost:3001/api');
+    console.log('   3. Login con: admin@camport.local / Admin123!');
+    console.log('   4. Frontend en: http://localhost:5173');
 
   } catch (error) {
     console.error('❌ Error configurando base de datos:', error);
-    
-    if (error.name === 'SequelizeConnectionError') {
-      console.log('\n🔧 SOLUCIÓN:');
-      console.log('   1. Verificar que PostgreSQL esté ejecutándose');
-      console.log('   2. Crear la base de datos "camport":');
-      console.log('      CREATE DATABASE camport;');
-      console.log('   3. Verificar credenciales en archivo .env');
-    }
-    
     process.exit(1);
   }
 }
@@ -119,8 +101,7 @@ async function createTestData() {
           { lat: -33.4574, lng: -70.6488 }
         ],
         area: 2.5,
-        capacidad_maxima: 50,
-        tipo_pasto: 'Kikuyo',
+        color: '#10B981',
         activo: true
       }
     });
@@ -136,13 +117,9 @@ async function createTestData() {
         where: { identificador: `COL-00${i}` },
         defaults: {
           modelo: 'SmartCollar Pro',
-          numero_serie: `SC${1000 + i}`,
           version_firmware: '1.2.3',
-          frecuencia_envio: 60,
-          umbral_bateria_baja: 20,
-          umbral_temperatura_alta: 39.5,
           bateria_actual: 85,
-          estado: 'inactivo',
+          fecha_instalacion: new Date(),
           activo: true
         }
       });
@@ -159,31 +136,24 @@ async function createTestData() {
     
     for (let i = 0; i < 3; i++) {
       const [animal, created] = await Animal.findOrCreate({
-        where: { identificacion: `A00${i + 1}` },
+        where: { identificador: `A00${i + 1}` },
         defaults: {
           nombre: nombres[i],
           raza: razas[i],
           sexo: i % 2 === 0 ? 'hembra' : 'macho',
           fecha_nacimiento: new Date(2020 + i, 3, 15),
-          edad: 4 - i,
+          edad_meses: (4 - i) * 12,
           peso: 450 + (i * 50),
-          color: i === 0 ? 'Negro con blanco' : i === 1 ? 'Rojo' : 'Marrón',
-          estado_salud: 'saludable',
+          estado: 'activo',
+          observaciones: `Animal de prueba #${i + 1}`,
           grupo_id: grupo.id,
           potrero_id: potrero.id,
-          collar_id: collares[i].id,
-          activo: true
+          collar_id: collares[i].id
         }
       });
 
       if (created) {
         console.log(`   ✅ Animal "${animal.nombre}" creado`);
-        
-        // Actualizar collar con animal_id
-        await collares[i].update({ 
-          animal_id: animal.id,
-          estado: 'activo'
-        });
       }
     }
 

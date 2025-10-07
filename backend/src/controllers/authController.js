@@ -4,7 +4,7 @@
  */
 
 const { Usuario } = require('../models');
-const { generateToken, generateRefreshToken } = require('../utils/jwt');
+const { generateToken, generateRefreshToken, verifyRefreshToken } = require('../utils/jwt');
 const logger = require('../utils/logger');
 
 /**
@@ -121,10 +121,9 @@ const refresh = async (req, res) => {
     const { refreshToken } = req.body;
 
     // Verificar el refresh token
-    const jwt = require('jsonwebtoken');
     let decoded;
     try {
-      decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
+      decoded = verifyRefreshToken(refreshToken);
     } catch (error) {
       return res.status(401).json({
         error: 'Refresh token inválido',

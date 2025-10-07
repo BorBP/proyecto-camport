@@ -46,25 +46,28 @@
      }));
 
      // 2. HTTPS enforcement en producción
-     if (process.env.NODE_ENV === 'production') {
-       app.use((req, res, next) => {
-         if (req.header('x-forwarded-proto') !== 'https') {
-           return res.redirect(301, `https://${req.header('host')}${req.url}`);
-         }
-         next();
-       });
-     }
+     // DISABLED for development - causing redirects on localhost
+     // if (process.env.NODE_ENV === 'production') {
+     //   app.use((req, res, next) => {
+     //     if (req.header('x-forwarded-proto') !== 'https') {
+     //       return res.redirect(301, `https://${req.header('host')}${req.url}`);
+     //     }
+     //     next();
+     //   });
+     // }
 
      // 3. CORS sin wildcard - requiere configuración explícita
      const corsOrigins = process.env.CORS_ORIGIN?.split(',').map(origin => origin.trim());
      if (!corsOrigins || corsOrigins.length === 0) {
        throw new Error('❌ CORS_ORIGIN no configurado. Define los orígenes permitidos en .env');
      }
-     app.use(cors({
-       origin: corsOrigins,
-       credentials: true,
-       optionsSuccessStatus: 200
-     }));
+    app.use(cors({
+      origin: corsOrigins,
+      credentials: false, // Frontend usa Bearer tokens, no cookies
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+      optionsSuccessStatus: 200
+    }));
 
      // 4. Rate limiting global
      const limiter = rateLimit({

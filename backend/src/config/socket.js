@@ -3,7 +3,7 @@
       */
 
      const socketIO = require('socket.io');
-     const { verifyToken } = require('./jwt');
+     const { verifyToken } = require('../utils/jwt');
      const logger = require('../utils/logger');
 
      let io = null;
@@ -16,7 +16,7 @@
        io = socketIO(server, {
          cors: {
            origin: process.env.CORS_ORIGIN?.split(',') || '*',
-           credentials: true
+           credentials: false // Consistente con el CORS de Express
          }
        });
 
