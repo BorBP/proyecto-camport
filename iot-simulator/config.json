@@ -1,0 +1,66 @@
+{
+       "backend": {
+         "url": "http://localhost:3000",
+         "endpoint": "/api/telemetria/ingest",
+         "timeout": 5
+       },
+       "simulacion": {
+         "intervalo_envio": 10,
+         "duracion_total": 0,
+         "modo_debug": true
+       },
+       "collares": [
+         {
+           "id": "COL-001",
+           "animal": "Bella",
+           "activo": true,
+           "posicion_inicial": {
+             "latitud": -33.4569,
+             "longitud": -70.6483,
+             "altitud": 500
+           },
+           "bateria_inicial": 100,
+           "temperatura_base": 38.5
+         },
+         {
+           "id": "COL-002",
+           "animal": "Mango",
+           "activo": true,
+           "posicion_inicial": {
+             "latitud": -33.4571,
+             "longitud": -70.6485,
+             "altitud": 502
+           },
+           "bateria_inicial": 85,
+           "temperatura_base": 38.3
+         },
+         {
+           "id": "COL-003",
+           "animal": "Luna",
+           "activo": true,
+           "posicion_inicial": {
+             "latitud": -33.4573,
+             "longitud": -70.6487,
+             "altitud": 498
+           },
+           "bateria_inicial": 92,
+           "temperatura_base": 38.7
+         }
+       ],
+       "potrero": {
+         "nombre": "Potrero Norte",
+         "coordenadas": [
+           {"lat": -33.4569, "lng": -70.6483},
+           {"lat": -33.4570, "lng": -70.6480},
+           {"lat": -33.4575, "lng": -70.6485},
+           {"lat": -33.4574, "lng": -70.6488}
+         ]
+       },
+       "parametros": {
+         "velocidad_movimiento": 0.00005,
+         "descarga_bateria": 0.01,
+         "variacion_temperatura": 0.3,
+         "actividad_minima": 20,
+         "actividad_maxima": 90
+       }
+}

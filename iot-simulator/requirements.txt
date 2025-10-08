@@ -1,7 +1,11 @@
-# Dependencias Python para el simulador IoT
-# Descomenta y agrega las que necesites:
+# Dependencias Python para el simulador IoT Camport
+# Sistema de simulación de collares inteligentes para ganado
 
-# paho-mqtt==1.6.1
-# requests==2.31.0
-# python-dotenv==1.0.0
-# flask==2.3.0
+# Cliente HTTP para enviar datos al backend
+requests==2.31.0
+
+# Variables de entorno (opcional)
+python-dotenv==1.0.0
+
+# Utilidades para consola con colores
+colorama==0.4.6
